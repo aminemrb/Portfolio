@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Amine Mourabit – Portfolio Étudiant en Réseaux & Cybersécurité à l'Université de Toulouse." />
+  <title>Amine Mourabit | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;600;700;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ░ CANVAS PARTICLE BACKGROUND ░ -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- ░ ANNOUNCEMENT BAR ░ -->
+  <div id="announce-bar">
+    <span class="announce-text">Disponible pour une <strong>alternance de 24 mois</strong> en Réseaux &amp;
+      Cybersécurité — début souhaité&nbsp;sept/oct&nbsp;2026</span>
+    <button class="announce-close" id="announce-close" aria-label="Fermer">&times;</button>
+  </div>
+
+  <!-- ░ NAV ░ -->
+  <nav id="navbar">
+    <div class="nav-logo">AM<span class="accent">_</span></div>
+    <ul class="nav-links">
+      <li><a href="#about" id="nav-about">À propos</a></li>
+      <li><a href="#formation" id="nav-formation">Formation</a></li>
+      <li><a href="#skills" id="nav-skills">Compétences</a></li>
+      <li><a href="#projects" id="nav-projects">Projets</a></li>
+      <li><a href="#contact" id="nav-contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  </nav>
+
+  <!-- ░ HERO ░ -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <span class="hero-tag">&lt; portfolio /&gt;</span>
+      <h1 class="hero-name">Amine <span class="accent">Mourabit</span></h1>
+      <div class="typewriter-wrapper">
+        <span class="typewriter" id="typewriter"></span>
+        <span class="cursor">|</span>
+      </div>
+      <p class="hero-sub">Étudiant en <strong>Licence IRT</strong> à l'<strong>Université de Toulouse</strong> passionné
+        par
+        les réseaux, la cybersécurité et les nouvelles technologies.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary" id="hero-btn-projects">Voir mes projets</a>
+        <a href="#contact" class="btn btn-outline" id="hero-btn-contact">Me contacter</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <span class="avatar-initials">AM</span>
+        </div>
+        <div class="orbit orbit-1">
+          <div class="orbit-dot"></div>
+        </div>
+        <div class="orbit orbit-2">
+          <div class="orbit-dot"></div>
+        </div>
+        <div class="orbit orbit-3">
+          <div class="orbit-dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ░ ABOUT ░ -->
+  <section class="section" id="about">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> À propos de moi</h2>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>Bonjour ! Je suis <strong>Amine Mourabit</strong>, étudiant passionné en <span class="highlight">L3 Réseaux
+              & Télécommunications</span> à l'Université de Toulouse.</p>
+          <p>Je m'intéresse à la protection des infrastructures numériques, à l'administration des réseaux et aux
+            nouvelles technologies. Toujours en quête de nouvelles connaissances, je travaille sur des projets pratiques
+            pour développer mes compétences.</p>
+          <p>Mon objectif : contribuer à un monde numérique plus <span class="highlight">sûr</span> et plus <span
+              class="highlight">connecté</span>.</p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <div class="stat-icon">🎓</div>
+            <div class="stat-info">
+              <span class="stat-value">L3 IRT</span>
+              <span class="stat-label">Université de Toulouse</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🔒</div>
+            <div class="stat-info">
+              <span class="stat-value">Cybersécurité</span>
+              <span class="stat-label">Domaine de spécialisation</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🌐</div>
+            <div class="stat-info">
+              <span class="stat-value">Réseaux et Systèmes</span>
+              <span class="stat-label">Administration & Infrastructure</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-info">
+              <span class="stat-value">Projets actifs</span>
+              <span class="stat-label">En apprentissage continu</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░ FORMATION ░ -->
+  <section class="section section-dark" id="formation">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> Formation</h2>
+      <div class="timeline">
+
+        <!-- Item 1 : Master (futur) -->
+        <div class="timeline-item fade-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-meta">
+              <span class="timeline-date">Sept. 2026 &ndash; 2028</span>
+              <div class="timeline-badge">En alternance</div>
+            </div>
+            <h3 class="timeline-title">Master RT <span class="accent">(STRI ou SSIR)</span></h3>
+            <p class="timeline-school">🎓 Université de Toulouse - Réseaux et Télécommunications</p>
+            <p class="timeline-desc">Spécialisation en Services de télécommunications, infrastructures et réseaux
+              informatiques ou sécurité des systèmes d'information et des réseaux.</p>
+          </div>
+        </div>
+
+        <!-- Item 2 : L3 IRT -->
+        <div class="timeline-item fade-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-meta">
+              <span class="timeline-date">2025 &ndash; 2026</span>
+            </div>
+            <h3 class="timeline-title">Licence 3 <span class="accent">IRT</span></h3>
+            <p class="timeline-school">🎓 Université de Toulouse &mdash; Informatique, Réseaux &amp; Télécoms</p>
+            <p class="timeline-desc">Administration de systèmes Windows/Linux. Réseaux d'entreprises et d'opérateurs
+              Bases des télécommunications.</p>
+          </div>
+        </div>
+
+        <!-- Item 3 : DUT -->
+        <div class="timeline-item fade-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card">
+            <div class="timeline-meta">
+              <span class="timeline-date">2023 &ndash; 2025</span>
+            </div>
+            <h3 class="timeline-title">DUT <span class="accent">Informatique</span></h3>
+            <p class="timeline-school">🎓 IUT de Toulouse - Paul Sabatier</p>
+            <p class="timeline-desc">Développement d'applications et bases de données. Fondamentaux réseaux/systèmes et
+              sécurité.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ░ SKILLS ░ -->
+  <section class="section section-dark" id="skills">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> Compétences</h2>
+      <div class="skills-cards-grid">
+
+        <!-- Carte 1 : Cybersécurité & Analyse -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-card-icon">🛡️</span>
+            <h3 class="skill-card-title">Cybersécurité</h3>
+          </div>
+          <div class="skill-pills">
+            <span class="pill pill-cyan">SIEM (Splunk/ELK)</span>
+            <span class="pill pill-cyan">EDR</span>
+            <span class="pill pill-cyan">VPN</span>
+            <span class="pill pill-cyan">Phishing analysis</span>
+            <span class="pill pill-cyan">Trafic analysis</span>
+            <span class="pill pill-cyan">Log analysis</span>
+            <span class="pill pill-cyan">Firewalling</span>
+            <span class="pill pill-cyan">IDS/IPS</span>
+            <span class="pill pill-cyan">Snort</span>
+            <span class="pill pill-cyan">CTI</span>
+            <span class="pill pill-cyan">MITRE ATT&amp;CK</span>
+          </div>
+        </div>
+
+        <!-- Carte 2 : Architectures Réseaux -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-card-icon">🌐</span>
+            <h3 class="skill-card-title">Réseaux</h3>
+          </div>
+          <div class="skill-pills">
+            <span class="pill pill-purple">TCP/IP</span>
+            <span class="pill pill-purple">OSI Model</span>
+            <span class="pill pill-purple">LAN/WAN</span>
+            <span class="pill pill-purple">VLAN</span>
+            <span class="pill pill-purple">DNS</span>
+            <span class="pill pill-purple">DHCP</span>
+            <span class="pill pill-purple">HTTP</span>
+            <span class="pill pill-purple">SSL/TLS</span>
+            <span class="pill pill-purple">Routing</span>
+            <span class="pill pill-purple">Switching</span>
+            <span class="pill pill-purple">Cisco</span>
+            <span class="pill pill-purple">Wireshark</span>
+            <span class="pill pill-purple">OSPF</span>
+            <span class="pill pill-purple">BGP</span>
+            <span class="pill pill-purple">RIP</span>
+          </div>
+        </div>
+
+        <!-- Carte 3 : Systèmes & Automatisation -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-card-icon">⚙️</span>
+            <h3 class="skill-card-title">Systèmes <span class="accent">&amp;</span> Automatisation</h3>
+          </div>
+          <div class="skill-pills">
+            <span class="pill pill-pink">Windows</span>
+            <span class="pill pill-pink">Active Directory</span>
+            <span class="pill pill-pink">Linux (Debian/Ubuntu)</span>
+            <span class="pill pill-pink">Ansible</span>
+            <span class="pill pill-pink">Python</span>
+            <span class="pill pill-pink">Bash</span>
+            <span class="pill pill-pink">Powershell</span>
+            <span class="pill pill-pink">Virtualisation (Proxmox, VMware, Docker)</span>
+          </div>
+        </div>
+
+        <!-- Carte 4 : Transverse -->
+        <div class="skill-card">
+          <div class="skill-card-header">
+            <span class="skill-card-icon">🔗</span>
+            <h3 class="skill-card-title">Compétences <span class="accent">Transverses</span></h3>
+          </div>
+          <div class="skill-pills">
+            <span class="pill pill-gray">Gestion de projet agile</span>
+            <span class="pill pill-gray">Travail en équipe</span>
+            <span class="pill pill-gray">Persévérant</span>
+            <span class="pill pill-gray">Résolution de problèmes</span>
+            <span class="pill pill-gray">Esprit d'analyse</span>
+            <span class="pill pill-gray">Anglais Technique</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ░ PROJECTS ░ -->
+  <section class="section" id="projects">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> Quelques Projets</h2>
+      <div class="projects-grid">
+
+        <article class="project-card" id="project-1">
+          <div class="project-header">
+            <span class="project-category">Réseaux</span>
+            <div class="project-links">
+              <span class="project-link-icon" title="Voir le projet">⬡</span>
+            </div>
+          </div>
+          <h3 class="project-title">Infrastructure Réseau d'Entreprise</h3>
+          <p class="project-desc">Conception et configuration d'une infrastructure réseau complète avec VLANs, routage
+            inter-VLAN, protocoles de routage dynamique et sécurisation des accès.</p>
+          <div class="project-tags">
+            <span class="tag">Equipements Cisco</span>
+            <span class="tag">VLAN</span>
+            <span class="tag">Routage Inter-VLAN</span>
+          </div>
+        </article>
+
+        <article class="project-card" id="project-2">
+          <div class="project-header">
+            <span class="project-category">Cybersécurité</span>
+            <div class="project-links">
+              <span class="project-link-icon" title="Voir le projet">⬡</span>
+            </div>
+          </div>
+          <h3 class="project-title">SOC Home Lab</h3>
+          <p class="project-desc">Conception d'une infrastructure virtualisée et intégration d'un SIEM pour la
+            supervision, la centralisation des logs et la détection d'intrusions. Simulation d'attaques avec Kali Linux
+          </p>
+          <div class="project-tags">
+            <span class="tag">Kali Linux</span>
+            <span class="tag">Splunk</span>
+            <span class="tag">pfSense</span>
+            <span class="tag">Active Directory</span>
+            <span class="tag">Ubuntu</span>
+          </div>
+        </article>
+
+        <article class="project-card" id="project-3">
+          <div class="project-header">
+            <span class="project-category">Systèmes</span>
+            <div class="project-links">
+              <span class="project-link-icon" title="Voir le projet">⬡</span>
+            </div>
+          </div>
+          <h3 class="project-title">Infrastructure Active Directory</h3>
+          <p class="project-desc">Conception et déploiement automatisé d'un domaine Windows Server via
+            Ansible. Intégration de la haute disponibilité, des services réseaux et durcissement par
+            stratégies de groupe.</p>
+          <div class="project-tags">
+            <span class="tag">Windows</span>
+            <span class="tag">Active Directory</span>
+            <span class="tag">DNS</span>
+            <span class="tag">DHCP</span>
+            <span class="tag">Ansible</span>
+            <span class="tag">GPO</span>
+          </div>
+        </article>
+
+        <article class="project-card" id="project-4">
+          <div class="project-header">
+            <span class="project-category">Développement</span>
+            <div class="project-links">
+              <span class="project-link-icon" title="Voir le projet">⬡</span>
+            </div>
+          </div>
+          <h3 class="project-title">Développement d'un site de critique de films</h3>
+          <p class="project-desc">Création d'un site web permettant aux utilisateurs de consulter, critiquer et de
+            partager leurs
+            impressions sur des films français</p>
+          <div class="project-tags">
+            <span class="tag">PHP</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">HTML/CSS</span>
+            <span class="tag">Gestion de projet</span>
+          </div>
+        </article>
+
+      </div>
+      <p class="projects-note">💡 Les projets peuvent être mis à jour. <a href="mailto:aminemourabit16@gmail.com"
+          class="inline-link">Contactez-moi</a> pour plus de détails.</p>
+    </div>
+  </section>
+
+  <!-- ░ CONTACT ░ -->
+  <section class="section section-dark" id="contact">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> Contact</h2>
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <p class="contact-lead">Envie de collaborer, d'échanger ou simplement discuter de tech ? N'hésitez pas à me
+            contacter !</p>
+          <div class="contact-item">
+            <span class="contact-icon">📧</span>
+            <a href="mailto:aminemourabit16@gmail.com" id="contact-email">aminemourabit16@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📍</span>
+            <span>Toulouse, France</span>
+          </div>
+          <div class="contact-social">
+            <a href="https://github.com/aminemrb" target="_blank" class="social-btn" id="social-github">GitHub</a>
+            <a href="https://www.linkedin.com/in/amine-m-b6a593328/" target="_blank" class="social-btn"
+              id="social-linkedin">LinkedIn</a>
+          </div>
+        </div>
+
+        <form class="contact-form" id="contact-form" action="https://formspree.io/f/mojkvdag" method="POST"
+          onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label for="form-name">Nom</label>
+            <input type="text" id="form-name" name="name" placeholder="Votre nom" required />
+          </div>
+          <div class="form-group">
+            <label for="form-email">Email</label>
+            <input type="email" id="form-email" name="email" placeholder="votre@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="form-message">Message</label>
+            <textarea id="form-message" name="message" rows="5" placeholder="Votre message..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" id="form-submit">Envoyer le message</button>
+          <div id="form-status" class="form-status"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ░ FOOTER ░ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-logo">AM<span class="accent">_</span></span>
+        <p class="footer-text">© 2026 Amine Mourabit · Portfolio</p>
+        <div class="footer-links">
+          <a href="#home">Accueil</a>
+          <a href="#about">À propos</a>
+          <a href="#formation">Formation</a>
+          <a href="#skills">Compétences</a>
+          <a href="#projects">Projets</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('announce-close').addEventListener('click', function () {
+      document.getElementById('announce-bar').style.display = 'none';
+    });
+  </script>
+</body>
+
+</html>
