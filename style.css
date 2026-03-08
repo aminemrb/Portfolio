@@ -1144,6 +1144,334 @@ img {
 }
 
 /* ══════════════════════════════════
+   NAV DROPDOWN (simple, 1 niveau)
+══════════════════════════════════ */
+
+/* Conteneur du dropdown dans la nav */
+.nav-dropdown {
+  position: relative;
+}
+
+/* Bouton TryHackMe – same look as the other nav links */
+.nav-dropdown-toggle {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  transition: var(--transition);
+}
+
+/* Soulignement accent au hover (identique aux autres liens nav) */
+.nav-dropdown-toggle::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: var(--transition);
+  box-shadow: var(--glow);
+}
+
+.nav-dropdown-toggle .dropdown-arrow {
+  font-size: 0.55rem;
+  opacity: 0.65;
+  transition: transform var(--transition);
+  display: inline-block;
+}
+
+/* Hover ou open : couleur cyan + soulignement + flèche rotatée */
+.nav-dropdown:hover > .nav-dropdown-toggle,
+.nav-dropdown.open > .nav-dropdown-toggle {
+  color: var(--accent);
+}
+.nav-dropdown:hover > .nav-dropdown-toggle::after,
+.nav-dropdown.open > .nav-dropdown-toggle::after { width: 100%; }
+.nav-dropdown:hover > .nav-dropdown-toggle .dropdown-arrow,
+.nav-dropdown.open > .nav-dropdown-toggle .dropdown-arrow { transform: rotate(180deg); }
+
+/* Panneau déroulant */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  min-width: 200px;
+  background: rgba(5, 10, 15, 0.97);
+  border: 1px solid rgba(0, 255, 231, 0.18);
+  border-top: 2px solid var(--accent);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 0.4rem 0;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 200;
+}
+
+.nav-dropdown:hover > .dropdown-menu,
+.nav-dropdown.open > .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Liens dans le panneau */
+.dropdown-menu a {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  padding: 0.6rem 1.2rem;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+  color: var(--accent);
+  background: rgba(0, 255, 231, 0.06);
+  padding-left: 1.5rem;
+}
+
+/* ══════════════════════════════════
+   WRITE-UP PAGE – REPORT LAYOUT
+══════════════════════════════════ */
+
+/* Hero banner for write-up pages */
+.writeup-hero {
+  padding: 9rem 0 4rem;
+  position: relative;
+  z-index: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.writeup-breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.writeup-breadcrumb a {
+  color: var(--accent);
+  transition: var(--transition);
+}
+
+.writeup-breadcrumb a:hover { opacity: 0.7; }
+
+.writeup-breadcrumb span { margin: 0 0.5rem; opacity: 0.4; }
+
+.writeup-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background: rgba(123, 79, 255, 0.1);
+  border: 1px solid rgba(123, 79, 255, 0.3);
+  padding: 0.3rem 0.9rem;
+  border-radius: 100px;
+  margin-bottom: 1.2rem;
+}
+
+.writeup-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+  letter-spacing: -0.5px;
+}
+
+.writeup-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.writeup-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.writeup-meta-item span:first-child { opacity: 0.7; }
+
+/* Introduction card */
+.writeup-intro {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.8rem 2rem;
+  margin-bottom: 3rem;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.writeup-intro p { margin-bottom: 0.8rem; }
+.writeup-intro p:last-child { margin-bottom: 0; }
+
+/* Step cards */
+.writeup-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding-bottom: 4rem;
+}
+
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+  position: relative;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: var(--transition);
+}
+
+.step-card:hover {
+  border-color: rgba(0, 255, 231, 0.3);
+  box-shadow: var(--glow);
+}
+
+.step-card:hover::before { transform: scaleX(1); }
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.4rem 1.8rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.step-number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent);
+  background: rgba(0, 255, 231, 0.1);
+  border: 1px solid rgba(0, 255, 231, 0.25);
+  padding: 0.25rem 0.7rem;
+  border-radius: 100px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.step-body {
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.85;
+}
+
+.step-text strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.step-text code {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: rgba(0, 255, 231, 0.07);
+  border: 1px solid rgba(0, 255, 231, 0.15);
+  color: var(--accent);
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+}
+
+/* Screenshot block */
+.step-screenshot {
+  position: relative;
+}
+
+.step-screenshot figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  margin-bottom: 0.7rem;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.step-screenshot img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 255, 231, 0.05);
+  transition: var(--transition);
+  display: block;
+}
+
+.step-screenshot img:hover {
+  border-color: rgba(0, 255, 231, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), var(--glow);
+  transform: scale(1.01);
+}
+
+/* Finding badge inline */
+.finding {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  background: rgba(255, 60, 110, 0.1);
+  border: 1px solid rgba(255, 60, 110, 0.3);
+  color: var(--accent3);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+/* ══════════════════════════════════
    SCROLL ANIMATIONS
 ══════════════════════════════════ */
 .fade-up {
@@ -1205,6 +1533,38 @@ img {
   }
 
   .hamburger {
+    display: block;
+  }
+
+  /* Mobile dropdown: static, no absolute positioning */
+  .nav-dropdown {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .nav-dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Level-1 panel */
+  .dropdown-menu {
+    position: static;
+    transform: none !important;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    box-shadow: none;
+    border: none;
+    border-left: 2px solid rgba(0, 255, 231, 0.18);
+    border-radius: 0;
+    background: transparent;
+    padding: 0 0 0 0.8rem;
+    display: none;
+    backdrop-filter: none;
+  }
+
+  .nav-dropdown.open > .dropdown-menu {
     display: block;
   }
 

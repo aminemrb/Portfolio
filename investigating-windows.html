@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Write-up TryHackMe – Investigating Windows : rapport d'incident complet sur une machine Windows Server 2016 compromise." />
+  <title>Investigating Windows – Write-up | Amine Mourabit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;600;700;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── WRITE-UP STEP GRID ── */
+    .step-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 0.9rem;
+      align-items: center;
+    }
+
+    .step-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+    }
+
+    .step-tag-obj {
+      background: rgba(0, 255, 231, 0.08);
+      border: 1px solid rgba(0, 255, 231, 0.22);
+      color: var(--accent);
+    }
+
+    .step-tag-met {
+      background: rgba(123, 79, 255, 0.09);
+      border: 1px solid rgba(123, 79, 255, 0.28);
+      color: rgba(180, 150, 255, 0.9);
+    }
+
+    .step-tag-res {
+      background: rgba(255, 60, 110, 0.08);
+      border: 1px solid rgba(255, 60, 110, 0.28);
+      color: rgba(255, 110, 150, 0.9);
+    }
+
+    .step-line {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+      font-size: 0.93rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .step-line strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .step-line code {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      background: rgba(0, 255, 231, 0.07);
+      border: 1px solid rgba(0, 255, 231, 0.15);
+      color: var(--accent);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .step-arrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent2);
+      flex-shrink: 0;
+      opacity: 0.7;
+    }
+
+    .step-screenshot img {
+      border-radius: 10px;
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 255, 231, 0.07);
+      border: 1px solid var(--border);
+      width: 100%;
+      display: block;
+      transition: var(--transition);
+    }
+
+    .step-screenshot img:hover {
+      border-color: rgba(0, 255, 231, 0.3);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.65), var(--glow);
+      transform: scale(1.01);
+    }
+
+    .step-screenshot figcaption {
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 0.55rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ░ CANVAS PARTICLE BACKGROUND ░ -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- ░ NAV ░ -->
+  <nav id="navbar">
+    <div class="nav-logo"><a href="index.html" style="color:inherit">AM<span class="accent">_</span></a></div>
+    <ul class="nav-links">
+      <li><a href="index.html#about">À propos</a></li>
+      <li><a href="index.html#formation">Formation</a></li>
+      <li><a href="index.html#skills">Compétences</a></li>
+      <li><a href="index.html#projects">Projets</a></li>
+      <li class="nav-dropdown" id="nav-dropdown-thm">
+        <button class="nav-dropdown-toggle" id="nav-thm-toggle" aria-haspopup="true" aria-expanded="false">
+          TryHackMe <span class="dropdown-arrow">▼</span>
+        </button>
+        <div class="dropdown-menu" role="menu">
+          <a href="investigating-windows.html" role="menuitem">Investigating Windows</a>
+        </div>
+      </li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  </nav>
+
+  <!-- ░ WRITE-UP HERO ░ -->
+  <div class="writeup-hero">
+    <div class="container">
+      <p class="writeup-breadcrumb">
+        <a href="index.html">Accueil</a>
+        <span>/</span>
+        <a href="#">TryHackMe</a>
+        <span>/</span>
+        Investigating Windows
+      </p>
+      <div class="writeup-badge">&nbsp;TryHackMe · Challenge</div>
+      <h1 class="writeup-title">Investigating <span class="accent">Windows</span></h1>
+      <div class="writeup-meta">
+        <div class="writeup-meta-item">
+          <span>🖥️</span>
+          <span>Windows Server 2016</span>
+        </div>
+        <div class="writeup-meta-item">
+          <span>🔍</span>
+          <span>Digital Forensics &amp; Incident Response</span>
+        </div>
+        <div class="writeup-meta-item">
+          <span>🔗</span>
+          <span><a href="https://tryhackme.com/room/investigatingwindows" target="_blank" class="inline-link"
+              style="color:var(--accent)">tryhackme.com/room/investigatingwindows</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░ WRITE-UP BODY ░ -->
+  <section class="section section-dark">
+    <div class="container">
+
+      <!-- Introduction -->
+      <div class="writeup-intro fade-up">
+        <p
+          style="font-family:var(--font-mono); font-size:0.78rem; letter-spacing:1px; color:var(--accent); text-transform:uppercase; margin-bottom:0.9rem;">
+          // Contexte
+        </p>
+        <p>
+          Investigation forensique d'une machine <strong>Windows Server 2016</strong> compromise.
+          Objectif : reconstituer la chaîne d'attaque complète — accès initial, persistance, élévation de
+          privilèges, C2 — en s'appuyant uniquement sur les outils natifs Windows et les journaux d'événements.
+        </p>
+      </div>
+
+      <div class="writeup-steps">
+
+        <!-- ── 01 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 01</span>
+            <h2 class="step-title">Version du système</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier précisément l'OS de la machine
+                cible.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Exécution de <code>systeminfo</code> dans
+                PowerShell.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> <strong>Microsoft Windows Server 2016
+                  Datacenter — Build 14393.</strong></div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 systeminfo</figcaption>
+              <img src="img/thm/windows/1.png" alt="Commande systeminfo – Windows Server 2016 Datacenter Build 14393"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 02 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 02</span>
+            <h2 class="step-title">Dernier utilisateur connecté</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Déterminer quel compte a ouvert la dernière
+                session.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Filtrage de l'Observateur d'événements sur
+                <code>Event ID 4624</code> (ouverture de session réussie).
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> <strong>Administrator</strong> — dernier logon
+                le <strong>3/8/2026.</strong></div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Event ID 4624 – dernière ouverture de session</figcaption>
+              <img src="img/thm/windows/2.png" alt="Event Viewer – Event ID 4624 montrant la connexion Administrator"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 03 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 03</span>
+            <h2 class="step-title">Dernière connexion de l'utilisateur John</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Dater la dernière activité du compte
+                <strong>John</strong>.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span>
+                <code>net user John | select-string "Last"</code>
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Dernière connexion le <strong>3/2/2019 à
+                  5:48:32 PM.</strong></div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 net user John – Last Logon</figcaption>
+              <img src="img/thm/windows/3.png" alt="Commande net user John affichant la date de dernière connexion"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 04 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 04</span>
+            <h2 class="step-title">Persistance via le Registre</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier les programmes lancés
+                automatiquement à chaque démarrage.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Inspection de la clé
+                <code>HKLM\...\CurrentVersion\Run</code> dans regedit.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Entrée suspecte
+                <strong><code>BadrClient</code></strong> exécutant un script pointant vers <strong>10.34.2.3.</strong>
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Registre – clé Run malveillante BadrClient</figcaption>
+              <img src="img/thm/windows/4.png" alt="Éditeur de registre – valeur BadrClient dans la clé Run"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 05 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 05</span>
+            <h2 class="step-title">Analyse des privilèges administrateur</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Lister tous les comptes disposant de droits
+                admin locaux.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> <code>net localgroup administrators</code></div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span>
+                <strong>Guest</strong>, <strong>Jenny</strong>
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 net localgroup administrators</figcaption>
+              <img src="img/thm/windows/5.png" alt="net localgroup administrators – comptes suspects présents"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 06 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 06</span>
+            <h2 class="step-title">Tâche planifiée malveillante</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Détecter les tâches planifiées utilisées pour
+                la persistance.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Inspection du <strong>Planificateur de
+                  tâches</strong> (Task Scheduler) Windows.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Tâche anormale :
+                <strong><code>Clean file system</code></strong>.
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Task Scheduler – tâche Clean file system</figcaption>
+              <img src="img/thm/windows/6.png" alt="Planificateur de tâches Windows – tâche falshupdate22"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 07 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 07</span>
+            <h2 class="step-title">Analyse du payload — Reverse Shell</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier la charge utile exécutée par la
+                tâche <code>clean file system</code>.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Lecture des <strong>Actions</strong> de la tâche
+                dans le Planificateur.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Exécution de
+                <strong><code>nc.ps1 -l 1348</code></strong> — reverse shell PowerShell en écoute sur le port
+                <strong>1348.</strong>
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Action de falshupdate22 – nc.ps1 -l 1348</figcaption>
+              <img src="img/thm/windows/7.png" alt="Action de la tâche planifiée falshupdate22 – reverse shell nc.ps1"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 08 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 08</span>
+            <h2 class="step-title">Vérification de l'utilisateur Jenny</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Vérifier si le compte <strong>Jenny</strong> a
+                déjà été utilisé.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> <code>net user Jenny</code></div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> <em>Last Logon</em> : <strong>Never</strong> —
+                compte créé mais jamais utilisé.</div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 net user Jenny – Last Logon : Never</figcaption>
+              <img src="img/thm/windows/8.png" alt="net user Jenny – Last Logon Never" loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 09 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 09</span>
+            <h2 class="step-title">Date de la compromission initiale</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Dater précisément le début de la compromission.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Date de planification de la tâche.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> L'attaque initiale remonte au
+                <strong>3/2/2019.</strong>
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Corrélation des dates – compromission initiale</figcaption>
+              <img src="img/thm/windows/9.png"
+                alt="Corrélation des horodatages révélant le 3/2/2019 comme date de compromission" loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 10 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 10</span>
+            <h2 class="step-title">Élévation de privilèges</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier le moment exact où l'attaquant a
+                obtenu des droits élevés.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Filtrage des logs de sécurité sur
+                <code>Event ID 4672</code> (attribution de privilèges spéciaux).
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Privilèges spéciaux attribués à <strong>4:04:49
+                  PM</strong> le 3/2/2019.</div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Event ID 4672 – attribution de privilèges spéciaux</figcaption>
+              <img src="img/thm/windows/10.png"
+                alt="Event Viewer – Event ID 4672 montrant l'élévation de privilèges à 4:04:49 PM" loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 11 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 11</span>
+            <h2 class="step-title">Outil de vol d'identifiants — Mimikatz</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier les outils offensifs utilisés pour
+                le vol de credentials.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Analyse des alertes Windows Defender —
+                <code>Event ID 1116</code> (détection malware).
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Détection de
+                <strong><code>HackTool:Win32/Mimikatz.l</code></strong> — dump de hachages NTLM en mémoire.
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Windows Defender – Event 1116 – HackTool:Win32/Mimikatz.l</figcaption>
+              <img src="img/thm/windows/11.png" alt="Windows Defender Event 1116 – détection de Mimikatz"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 12 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 12</span>
+            <h2 class="step-title">Serveur C2 — DNS Poisoning</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier l'infrastructure Command &amp;
+                Control de l'attaquant.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Analyse du fichier
+                <code>C:\Windows\System32\drivers\etc\hosts</code>.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> <code>google.com</code> redirigé vers
+                <strong>76.32.97.132</strong> — IP du serveur C2 de l'attaquant.
+              </div>
+            </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Fichier hosts – entrée frauduleuse C2</figcaption>
+              <img src="img/thm/windows/12.png" alt="Fichier hosts Windows – google.com redirigé vers 76.32.97.132"
+                loading="lazy" />
+            </figure>
+          </div>
+        </div>
+
+        <!-- ── 13 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 13</span>
+            <h2 class="step-title">Découverte du Web Shell</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Identifier le vecteur d'accès initial au
+                serveur web.</div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> Inspection du répertoire IIS :
+                <code>C:\inetpub\wwwroot</code>.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Fichier <strong><code>b.jsp</code></strong>
+                détecté — webshell permettant l'exécution de commandes via HTTP.</div>
+              restreint
+            </div>
+          </div>
+          <figure class="step-screenshot">
+            <figcaption>📸 C:\inetpub\wwwroot – webshell b.jsp</figcaption>
+            <img src="img/thm/windows/13.png" alt="Répertoire wwwroot IIS – webshell b.jsp" loading="lazy" />
+          </figure>
+        </div>
+      </div>
+
+      <!-- ── 14 ── -->
+      <div class="step-card fade-up">
+        <div class="step-header">
+          <span class="step-number">Étape 14</span>
+          <h2 class="step-title">Ouverture de port dans le Pare-feu</h2>
+        </div>
+        <div class="step-body">
+          <div class="step-text">
+            <div class="step-line"><span class="step-arrow">▸</span><span><span
+                  class="step-tag step-tag-obj">Objectif</span></span> Détecter les règles de pare-feu ajoutées par
+              l'attaquant.</div>
+            <div class="step-line"><span class="step-arrow">▸</span><span><span
+                  class="step-tag step-tag-met">Méthode</span></span> Analyse des règles <em>Inbound</em> dans le
+              Pare-feu Windows Defender avec fonctions avancées.</div>
+            <div class="step-line"><span class="step-arrow">▸</span><span><span
+                  class="step-tag step-tag-res">Résultat</span></span> Règle frauduleuse <strong>"Allow outside
+                connections for development"</strong> autorisant le trafic sur le port <strong>TCP 1337.</strong>
+            </div>
+          </div>
+          <figure class="step-screenshot">
+            <figcaption>📸 Pare-feu Windows – règle entrante port TCP 1337</figcaption>
+            <img src="img/thm/windows/14.png"
+              alt="Règles Inbound pare-feu Windows – Allow outside connections for development port 1337"
+              loading="lazy" />
+          </figure>
+        </div>
+      </div>
+
+    </div><!-- /writeup-steps -->
+
+    <!-- IOC Summary -->
+    <!-- mettre un style avec des ecarts -->
+    <div class="writeup-intro fade-up" style="margin: 2rem; border-left-color:var(--accent2);">
+      <p
+        style="font-family:var(--font-mono); font-size:0.78rem; letter-spacing:1px; color:var(--accent2); text-transform:uppercase; margin-bottom:0.9rem;">
+        // Synthèse — Chaîne d'attaque
+      </p>
+      <p>
+        <strong>1. Accès Initial (T1505.003) :</strong> L'intrusion commence par la compromission du serveur web où
+        l'attaquant parvient à déposer un webshell.
+      </p>
+      <p>
+        <strong>2. Vol d'Identifiants (T1003) :</strong> Une fois l'accès initial sécurisé, l'outil
+        <code>Mimikatz</code> est déployé sur le système pour extraire les hachages NTLM ou les mots de passe en clair
+        directement depuis la mémoire du serveur.
+      </p>
+      <p>
+        <strong>3. Élévation de Privilèges (Event 4672) :</strong> L'attaquant consolide son emprise en obtenant les
+        droits d'administration. Les journaux révèlent l'attribution de privilèges spéciaux
+      </p>
+      <p>
+        <strong>4. Persistance Multicouche (T1547.001 & T1053.005) :</strong> Pour survivre à un redémarrage,
+        l'attaquant ancre sa présence à deux niveaux : la création d'une clé de registre <code>BadrClient</code> qui
+        s'exécute automatiquement, et la mise en place de la tâche planifiée <code>clean file system</code> lançant un
+        reverse shell via <code>nc.ps1</code> sur le port 1348.
+      </p>
+      <p>
+        <strong>5. Command & Control (T1071) :</strong> La communication avec l'infrastructure pirate est garantie par
+        un DNS poisoning redirigeant le trafic légitime vers l'IP <code>76.32.97.132</code>. Pour parfaire son contrôle,
+        une règle de pare-feu est ajoutée pour ouvrir le port TCP <code>1337</code> aux connexions externes.
+      </p>
+    </div>
+
+    </div>
+  </section>
+
+  <!-- ░ FOOTER ░ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-logo">AM<span class="accent">_</span></span>
+        <p class="footer-text">© 2026 Amine Mourabit · Portfolio</p>
+        <div class="footer-links">
+          <a href="index.html">Accueil</a>
+          <a href="index.html#about">À propos</a>
+          <a href="index.html#formation">Formation</a>
+          <a href="index.html#skills">Compétences</a>
+          <a href="index.html#projects">Projets</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>

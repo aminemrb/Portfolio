@@ -96,6 +96,35 @@
   navLinks.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => navLinks.classList.remove('open'));
   });
+
+  // ── TRYHACKME DROPDOWN ── clic (mobile) + hover géré en CSS ──
+  const dropdown = document.getElementById('nav-dropdown-thm');
+  const toggleBtn = document.getElementById('nav-thm-toggle');
+
+  if (dropdown && toggleBtn) {
+    // Clic : ouvre/ferme (utile sur mobile et pour le clavier)
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      toggleBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Clic en dehors : ferme
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Échap : ferme
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        dropdown.classList.remove('open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
 })();
 
 
