@@ -46,10 +46,10 @@
 (function initTypewriter() {
   const el = document.getElementById('typewriter');
   const phrases = [
-    'Recherche d\'alternance (2 ans) en Réseaux et Cybersécurité - Master R&T',
-    'Étudiant en L3 Informatique, Réseaux et Télécommunications',
-    'Futur Ingénieur Cybersécurité',
-    'Network & Security Enthusiast',
+    'Recherche une alternance en Systèmes, Réseaux & Sécurité - Master R&T',
+    'Étudiant en L3 Informatique, R&T',
+    'Futur Ingénieur Infrastructure & Sécurité',
+    'Cybersecurity Enthusiast',
   ];
   let phraseIdx = 0, charIdx = 0, deleting = false;
 
