@@ -123,14 +123,7 @@
       <li><a href="index.html#formation">Formation</a></li>
       <li><a href="index.html#skills">Compétences</a></li>
       <li><a href="index.html#projects">Projets</a></li>
-      <li class="nav-dropdown" id="nav-dropdown-thm">
-        <button class="nav-dropdown-toggle" id="nav-thm-toggle" aria-haspopup="true" aria-expanded="false">
-          TryHackMe <span class="dropdown-arrow">▼</span>
-        </button>
-        <div class="dropdown-menu" role="menu">
-          <a href="investigating-windows.html" role="menuitem">Investigating Windows</a>
-        </div>
-      </li>
+      <li><a href="investigating-windows.html" class="nav-active">TryHackMe</a></li>
       <li><a href="index.html#contact">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
@@ -142,7 +135,7 @@
       <p class="writeup-breadcrumb">
         <a href="index.html">Accueil</a>
         <span>/</span>
-        <a href="#">TryHackMe</a>
+        <a href="investigating-windows.html">TryHackMe</a>
         <span>/</span>
         Investigating Windows
       </p>
@@ -177,9 +170,10 @@
           // Contexte
         </p>
         <p>
-          Investigation forensique d'une machine <strong>Windows Server 2016</strong> compromise.
-          Objectif : reconstituer la chaîne d'attaque complète — accès initial, persistance, élévation de
-          privilèges, C2 — en s'appuyant uniquement sur les outils natifs Windows et les journaux d'événements.
+          Dans ce challenge TryHackMe, je me retrouve face à une machine <strong>Windows Server 2016</strong> qui
+          semble avoir été compromise. Ma mission est de mener une investigation forensique complète en reconstituant
+          la chaîne d'attaque — de l'accès initial à la mise en place du C2 — en utilisant uniquement les outils
+          natifs Windows et les journaux d'événements disponibles sur la machine.
         </p>
       </div>
 
@@ -194,14 +188,19 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier précisément l'OS de la machine
-                cible.</div>
+                    class="step-tag step-tag-obj">Objectif</span></span> Avant toute chose, j'ai besoin de connaître
+                précisément l'environnement sur lequel je travaille : quelle version de Windows tourne sur cette
+                machine ?
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Exécution de <code>systeminfo</code> dans
-                PowerShell.</div>
+                    class="step-tag step-tag-met">Méthode</span></span> J'ouvre PowerShell et j'exécute la commande
+                <code>systeminfo</code>. Cette commande native liste en détail les informations matérielles et
+                logicielles du système, y compris le nom et la build de l'OS.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> <strong>Microsoft Windows Server 2016
-                  Datacenter — Build 14393.</strong></div>
+                    class="step-tag step-tag-res">Résultat</span></span> La sortie confirme que la machine tourne sous
+                <strong>Microsoft Windows Server 2016 Datacenter, Build 14393.</strong>
+              </div>
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 systeminfo</figcaption>
@@ -220,15 +219,20 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Déterminer quel compte a ouvert la dernière
-                session.</div>
-              <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Filtrage de l'Observateur d'événements sur
-                <code>Event ID 4624</code> (ouverture de session réussie).
+                    class="step-tag step-tag-obj">Objectif</span></span> Je veux savoir quel compte utilisateur a été
+                le dernier à ouvrir une session sur cette machine. Cela me donnera un premier indicateur sur qui
+                contrôlait le système avant l'incident.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> <strong>Administrator</strong> — dernier logon
-                le <strong>3/8/2026.</strong></div>
+                    class="step-tag step-tag-met">Méthode</span></span> Je filtre l'<strong>Observateur
+                  d'événements</strong> sur le journal Sécurité en cherchant l'<code>Event ID 4624</code>, qui
+                correspond à chaque ouverture de session réussie. Je trie les résultats par date décroissante pour
+                isoler la toute dernière entrée.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> La dernière connexion enregistrée est celle
+                du compte <strong>Administrator</strong>, le <strong>3/8/2026.</strong>
+              </div>
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Event ID 4624 – dernière ouverture de session</figcaption>
@@ -247,16 +251,20 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Dater la dernière activité du compte
-                <strong>John</strong>.
+                    class="step-tag step-tag-obj">Objectif</span></span> En listant les comptes locaux, je repère un
+                utilisateur nommé <strong>John</strong>. Je dois déterminer quand celui-ci s'est connecté pour la
+                dernière fois, afin de le positionner dans la timeline de l'attaque.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span>
-                <code>net user John | select-string "Last"</code>
+                    class="step-tag step-tag-met">Méthode</span></span> Depuis PowerShell, j'exécute
+                <code>net user John | select-string "Last"</code> pour extraire uniquement la ligne contenant la date
+                de dernière connexion.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Dernière connexion le <strong>3/2/2019 à
-                  5:48:32 PM.</strong></div>
+                    class="step-tag step-tag-res">Résultat</span></span> La dernière connexion de John remonte au
+                <strong>3/2/2019 à 5:48:32 PM.</strong> Cette date correspond précisément au début présumé de la
+                compromission.
+              </div>
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 net user John – Last Logon</figcaption>
@@ -275,15 +283,22 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier les programmes lancés
-                automatiquement à chaque démarrage.</div>
-              <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Inspection de la clé
-                <code>HKLM\...\CurrentVersion\Run</code> dans regedit.
+                    class="step-tag step-tag-obj">Objectif</span></span> Après un accès initial, un attaquant cherche
+                à maintenir sa présence même après un redémarrage. Je me concentre donc sur les mécanismes de
+                persistance au démarrage, et notamment les clés de registre dites « Run ».
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Entrée suspecte
-                <strong><code>BadrClient</code></strong> exécutant un script pointant vers <strong>10.34.2.3.</strong>
+                    class="step-tag step-tag-met">Méthode</span></span> J'ouvre l'éditeur de registre
+                (<code>regedit</code>) et je navigue jusqu'à la clé
+                <code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</code>. C'est l'un des emplacements
+                classiques où les logiciels — ou les malwares — s'enregistrent pour s'exécuter automatiquement au
+                démarrage de Windows.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Je découvre une entrée suspecte portant le
+                nom <strong><code>BadrClient</code></strong> qui pointe vers un script avec une adresse IP codée en
+                dur : <strong>10.34.2.3.</strong> Il s'agit clairement d'un mécanisme de persistance posé par
+                l'attaquant.
               </div>
             </div>
             <figure class="step-screenshot">
@@ -303,13 +318,19 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Lister tous les comptes disposant de droits
-                admin locaux.</div>
+                    class="step-tag step-tag-obj">Objectif</span></span> Je veux auditer le groupe des
+                administrateurs locaux. Un attaquant ayant obtenu un foothold va souvent ajouter un compte à ce
+                groupe pour garantir ses accès futurs sans passer par une élévation de privilèges.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> <code>net localgroup administrators</code></div>
+                    class="step-tag step-tag-met">Méthode</span></span> J'exécute <code>net localgroup
+                  administrators</code> dans PowerShell pour lister tous les membres du groupe Administrateurs de la
+                machine.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span>
-                <strong>Guest</strong>, <strong>Jenny</strong>
+                    class="step-tag step-tag-res">Résultat</span></span> En plus du compte Administrator attendu, je
+                retrouve dans ce groupe les comptes <strong>Guest</strong> et <strong>Jenny</strong> — deux comptes
+                qui n'ont aucune raison légitime d'être administrateurs.
               </div>
             </div>
             <figure class="step-screenshot">
@@ -329,19 +350,24 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Détecter les tâches planifiées utilisées pour
-                la persistance.</div>
+                    class="step-tag step-tag-obj">Objectif</span></span> Les tâches planifiées sont un autre vecteur
+                de persistance très utilisé. Je cherche à identifier si l'attaquant en a créé une pour s'assurer
+                d'une exécution régulière de son code malveillant.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Inspection du <strong>Planificateur de
-                  tâches</strong> (Task Scheduler) Windows.</div>
+                    class="step-tag step-tag-met">Méthode</span></span> J'ouvre le <strong>Planificateur de
+                  tâches</strong> Windows (Task Scheduler) et je parcours la bibliothèque de tâches, en cherchant des
+                entrées anormales — noms suspects, déclencheurs inhabituels, ou actions pointant vers des scripts.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Tâche anormale :
-                <strong><code>Clean file system</code></strong>.
+                    class="step-tag step-tag-res">Résultat</span></span> Je tombe sur une tâche au nom trompeur :
+                <strong><code>Clean file system</code></strong>. Le nom est conçu pour passer inaperçu lors d'un
+                audit rapide, mais ses propriétés révèlent une action malveillante.
               </div>
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Task Scheduler – tâche Clean file system</figcaption>
-              <img src="img/thm/windows/6.png" alt="Planificateur de tâches Windows – tâche falshupdate22"
+              <img src="img/thm/windows/6.png" alt="Planificateur de tâches Windows – tâche Clean file system"
                 loading="lazy" />
             </figure>
           </div>
@@ -356,20 +382,24 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier la charge utile exécutée par la
-                tâche <code>clean file system</code>.</div>
+                    class="step-tag step-tag-obj">Objectif</span></span> Maintenant que j'ai identifié la tâche
+                suspecte <code>Clean file system</code>, je dois déterminer exactement ce qu'elle exécute. L'action
+                derrière une tâche planifiée malveillante est souvent le cœur du mécanisme de Command &amp; Control.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Lecture des <strong>Actions</strong> de la tâche
-                dans le Planificateur.</div>
+                    class="step-tag step-tag-met">Méthode</span></span> Je clique sur la tâche dans le Planificateur
+                et j'inspecte l'onglet <strong>Actions</strong> qui détaille les commandes ou scripts lancés.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Exécution de
-                <strong><code>nc.ps1 -l 1348</code></strong> — reverse shell PowerShell en écoute sur le port
-                <strong>1348.</strong>
+                    class="step-tag step-tag-res">Résultat</span></span> L'action exécute <strong><code>nc.ps1 -l
+                    1348</code></strong> — un script PowerShell qui ouvre un <strong>reverse shell</strong> en
+                écoute sur le port <strong>1348</strong>, permettant à l'attaquant de reprendre la main sur la
+                machine à tout moment.
               </div>
             </div>
             <figure class="step-screenshot">
-              <figcaption>📸 Action de falshupdate22 – nc.ps1 -l 1348</figcaption>
-              <img src="img/thm/windows/7.png" alt="Action de la tâche planifiée falshupdate22 – reverse shell nc.ps1"
+              <figcaption>📸 Action de la tâche – nc.ps1 -l 1348</figcaption>
+              <img src="img/thm/windows/7.png" alt="Action de la tâche planifiée – reverse shell nc.ps1"
                 loading="lazy" />
             </figure>
           </div>
@@ -384,13 +414,19 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Vérifier si le compte <strong>Jenny</strong> a
-                déjà été utilisé.</div>
+                    class="step-tag step-tag-obj">Objectif</span></span> Le compte <strong>Jenny</strong> figure dans
+                le groupe des administrateurs, mais est-il réellement utilisé ? Un compte fantôme créé par un
+                attaquant et jamais utilisé reste néanmoins dangereux, car il peut servir de porte dérobée.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> <code>net user Jenny</code></div>
+                    class="step-tag step-tag-met">Méthode</span></span> J'exécute <code>net user Jenny</code> pour
+                consulter les informations de ce compte, notamment la date de dernière connexion.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> <em>Last Logon</em> : <strong>Never</strong> —
-                compte créé mais jamais utilisé.</div>
+                    class="step-tag step-tag-res">Résultat</span></span> Le champ <em>Last Logon</em> affiche
+                <strong>Never</strong> : le compte a été créé, mais n'a jamais été utilisé pour ouvrir une session.
+                C'est un compte de backdoor classique, mis en réserve par l'attaquant.
+              </div>
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 net user Jenny – Last Logon : Never</figcaption>
@@ -408,13 +444,19 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Dater précisément le début de la compromission.
+                    class="step-tag step-tag-obj">Objectif</span></span> La question centrale de toute investigation
+                forensique est : <em>quand l'attaque a-t-elle commencé ?</em> Je dois établir la date précise du
+                premier incident pour construire une timeline cohérente.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Date de planification de la tâche.</div>
+                    class="step-tag step-tag-met">Méthode</span></span> Je croise les horodatages collectés jusqu'ici
+                : la date de création de la tâche planifiée malveillante, la date de dernière connexion de John, et
+                les premiers événements suspects dans les logs de sécurité.
+              </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> L'attaque initiale remonte au
-                <strong>3/2/2019.</strong>
+                    class="step-tag step-tag-res">Résultat</span></span> La corrélation des données pointe vers le
+                <strong>3/2/2019</strong> comme date de compromission initiale — jour qui correspond à la fois à
+                la dernière connexion de John et à la création des mécanismes de persistance.
               </div>
             </div>
             <figure class="step-screenshot">
@@ -434,15 +476,20 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier le moment exact où l'attaquant a
-                obtenu des droits élevés.</div>
-              <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Filtrage des logs de sécurité sur
-                <code>Event ID 4672</code> (attribution de privilèges spéciaux).
+                    class="step-tag step-tag-obj">Objectif</span></span> Je cherche à identifier le moment exact où
+                l'attaquant a réussi à obtenir des droits élevés sur le système. Ce pivot est un événement critique
+                dans la chaîne d'attaque.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Privilèges spéciaux attribués à <strong>4:04:49
-                  PM</strong> le 3/2/2019.</div>
+                    class="step-tag step-tag-met">Méthode</span></span> Je filtre les journaux de sécurité Windows
+                sur l'<code>Event ID 4672</code> — « Attribution de privilèges spéciaux à une nouvelle session ».
+                Cet événement est généré à chaque fois qu'un compte avec des droits sensibles ouvre une session.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> L'événement indique que des privilèges
+                spéciaux ont été attribués à <strong>4:04:49 PM</strong> le 3/2/2019, ce qui correspond à la fenêtre
+                temporelle de la compromission initiale.
+              </div>
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Event ID 4672 – attribution de privilèges spéciaux</figcaption>
@@ -461,15 +508,21 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier les outils offensifs utilisés pour
-                le vol de credentials.</div>
-              <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Analyse des alertes Windows Defender —
-                <code>Event ID 1116</code> (détection malware).
+                    class="step-tag step-tag-obj">Objectif</span></span> Une fois les privilèges élevés obtenus,
+                l'attaquant cherche généralement à extraire des identifiants pour se déplacer latéralement dans le
+                réseau. Je cherche à identifier quel outil a été utilisé à cette fin.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Détection de
-                <strong><code>HackTool:Win32/Mimikatz.l</code></strong> — dump de hachages NTLM en mémoire.
+                    class="step-tag step-tag-met">Méthode</span></span> Je consulte les journaux de
+                <strong>Windows Defender</strong> en filtrant sur l'<code>Event ID 1116</code>, qui correspond aux
+                détections de malware par l'antivirus. Windows Defender peut avoir déclenché une alerte même si
+                l'exécution a quand même eu lieu.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Windows Defender a détecté
+                <strong><code>HackTool:Win32/Mimikatz.l</code></strong> sur le système. Mimikatz est l'outil
+                offensif de référence pour extraire les hachages NTLM et les mots de passe en clair directement
+                depuis la mémoire du processus LSASS.
               </div>
             </div>
             <figure class="step-screenshot">
@@ -489,15 +542,21 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier l'infrastructure Command &amp;
-                Control de l'attaquant.</div>
-              <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Analyse du fichier
-                <code>C:\Windows\System32\drivers\etc\hosts</code>.
+                    class="step-tag step-tag-obj">Objectif</span></span> Je m'attelle maintenant à identifier
+                l'infrastructure Command &amp; Control (C2) de l'attaquant — le serveur distant depuis lequel il
+                contrôle la machine compromise.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> <code>google.com</code> redirigé vers
-                <strong>76.32.97.132</strong> — IP du serveur C2 de l'attaquant.
+                    class="step-tag step-tag-met">Méthode</span></span> J'inspecte le fichier
+                <code>C:\Windows\System32\drivers\etc\hosts</code>. Ce fichier est souvent modifié par des malwares
+                pour rediriger le trafic DNS de domaines légitimes vers des serveurs contrôlés par l'attaquant,
+                sans que la victime ne s'en aperçoive.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Le fichier a été falsifié : le domaine
+                <code>google.com</code> est redirigé vers l'adresse IP <strong>76.32.97.132</strong>, qui correspond
+                au serveur C2 de l'attaquant. Toute requête vers Google depuis cette machine atterrit en réalité
+                sur l'infrastructure pirate.
               </div>
             </div>
             <figure class="step-screenshot">
@@ -517,87 +576,99 @@
           <div class="step-body">
             <div class="step-text">
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-obj">Objectif</span></span> Identifier le vecteur d'accès initial au
-                serveur web.</div>
-              <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-met">Méthode</span></span> Inspection du répertoire IIS :
-                <code>C:\inetpub\wwwroot</code>.
+                    class="step-tag step-tag-obj">Objectif</span></span> Il me reste à identifier le vecteur initial
+                d'accès — comment l'attaquant a-t-il mis un premier pied dans le système ? La machine étant un
+                serveur web IIS, je concentre mon analyse sur le répertoire racine du serveur.
               </div>
               <div class="step-line"><span class="step-arrow">▸</span><span><span
-                    class="step-tag step-tag-res">Résultat</span></span> Fichier <strong><code>b.jsp</code></strong>
-                détecté — webshell permettant l'exécution de commandes via HTTP.</div>
-              restreint
+                    class="step-tag step-tag-met">Méthode</span></span> J'inspecte le contenu du répertoire
+                <code>C:\inetpub\wwwroot</code>, qui héberge les fichiers publiés par IIS. Je recherche des fichiers
+                inhabituels ou des scripts qui n'ont rien à faire dans cet espace.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Je découvre un fichier nommé
+                <strong><code>b.jsp</code></strong> — un webshell Java Server Pages qui permet à quiconque connaît
+                son URL d'exécuter des commandes arbitraires sur le serveur directement via HTTP, sans aucune
+                authentification.
+              </div>
             </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 C:\inetpub\wwwroot – webshell b.jsp</figcaption>
+              <img src="img/thm/windows/13.png" alt="Répertoire wwwroot IIS – webshell b.jsp" loading="lazy" />
+            </figure>
           </div>
-          <figure class="step-screenshot">
-            <figcaption>📸 C:\inetpub\wwwroot – webshell b.jsp</figcaption>
-            <img src="img/thm/windows/13.png" alt="Répertoire wwwroot IIS – webshell b.jsp" loading="lazy" />
-          </figure>
         </div>
-      </div>
 
-      <!-- ── 14 ── -->
-      <div class="step-card fade-up">
-        <div class="step-header">
-          <span class="step-number">Étape 14</span>
-          <h2 class="step-title">Ouverture de port dans le Pare-feu</h2>
-        </div>
-        <div class="step-body">
-          <div class="step-text">
-            <div class="step-line"><span class="step-arrow">▸</span><span><span
-                  class="step-tag step-tag-obj">Objectif</span></span> Détecter les règles de pare-feu ajoutées par
-              l'attaquant.</div>
-            <div class="step-line"><span class="step-arrow">▸</span><span><span
-                  class="step-tag step-tag-met">Méthode</span></span> Analyse des règles <em>Inbound</em> dans le
-              Pare-feu Windows Defender avec fonctions avancées.</div>
-            <div class="step-line"><span class="step-arrow">▸</span><span><span
-                  class="step-tag step-tag-res">Résultat</span></span> Règle frauduleuse <strong>"Allow outside
-                connections for development"</strong> autorisant le trafic sur le port <strong>TCP 1337.</strong>
+        <!-- ── 14 ── -->
+        <div class="step-card fade-up">
+          <div class="step-header">
+            <span class="step-number">Étape 14</span>
+            <h2 class="step-title">Ouverture de port dans le Pare-feu</h2>
+          </div>
+          <div class="step-body">
+            <div class="step-text">
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-obj">Objectif</span></span> Pour garantir la communication avec son
+                infrastructure, l'attaquant doit s'assurer que le pare-feu ne bloque pas ses connexions. Je cherche
+                des règles de pare-feu qui auraient été ajoutées sans autorisation.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-met">Méthode</span></span> J'ouvre le <strong>Pare-feu Windows Defender
+                  avec fonctions avancées de sécurité</strong> et j'examine les règles entrantes (<em>Inbound
+                  Rules</em>), en cherchant des règles récemment créées avec des noms ou des ports suspects.
+              </div>
+              <div class="step-line"><span class="step-arrow">▸</span><span><span
+                    class="step-tag step-tag-res">Résultat</span></span> Je trouve une règle frauduleuse intitulée
+                <strong>"Allow outside connections for development"</strong>, qui autorise toutes les connexions
+                entrantes sur le port <strong>TCP 1337</strong>. Le nom est délibérément trompeur pour passer pour
+                une règle légitime de développement.
+              </div>
             </div>
+            <figure class="step-screenshot">
+              <figcaption>📸 Pare-feu Windows – règle entrante port TCP 1337</figcaption>
+              <img src="img/thm/windows/14.png"
+                alt="Règles Inbound pare-feu Windows – Allow outside connections for development port 1337"
+                loading="lazy" />
+            </figure>
           </div>
-          <figure class="step-screenshot">
-            <figcaption>📸 Pare-feu Windows – règle entrante port TCP 1337</figcaption>
-            <img src="img/thm/windows/14.png"
-              alt="Règles Inbound pare-feu Windows – Allow outside connections for development port 1337"
-              loading="lazy" />
-          </figure>
         </div>
+
+      </div><!-- /writeup-steps -->
+
+      <!-- IOC Summary -->
+      <div class="writeup-intro fade-up" style="margin: 2rem 0; border-left-color:var(--accent2);">
+        <p
+          style="font-family:var(--font-mono); font-size:0.78rem; letter-spacing:1px; color:var(--accent2); text-transform:uppercase; margin-bottom:0.9rem;">
+          // Synthèse — Chaîne d'attaque
+        </p>
+        <p>
+          <strong>1. Accès Initial (T1505.003) :</strong> L'intrusion commence par la compromission du serveur web où
+          l'attaquant parvient à déposer un webshell <code>b.jsp</code> dans le répertoire IIS. Ce fichier lui offre
+          une exécution de commandes à distance sans la moindre authentification.
+        </p>
+        <p>
+          <strong>2. Vol d'Identifiants (T1003) :</strong> Une fois l'accès initial sécurisé, l'outil
+          <code>Mimikatz</code> est déployé sur le système pour extraire les hachages NTLM ou les mots de passe en
+          clair directement depuis la mémoire du processus LSASS.
+        </p>
+        <p>
+          <strong>3. Élévation de Privilèges (Event 4672) :</strong> L'attaquant consolide son emprise en obtenant les
+          droits d'administration à <strong>4:04:49 PM</strong> le 3/2/2019. Il ajoute également les comptes
+          <code>Guest</code> et <code>Jenny</code> au groupe Administrateurs locaux.
+        </p>
+        <p>
+          <strong>4. Persistance Multicouche (T1547.001 &amp; T1053.005) :</strong> Pour survivre à un redémarrage,
+          l'attaquant ancre sa présence à deux niveaux : la création d'une clé de registre <code>BadrClient</code> qui
+          s'exécute automatiquement au démarrage, et la mise en place de la tâche planifiée <code>Clean file
+            system</code> lançant un reverse shell via <code>nc.ps1</code> sur le port 1348.
+        </p>
+        <p>
+          <strong>5. Command &amp; Control (T1071) :</strong> La communication avec l'infrastructure pirate est assurée
+          par un DNS poisoning du fichier <code>hosts</code> redirigeant le trafic vers l'IP
+          <code>76.32.97.132</code>, et par une règle de pare-feu ouvrant le port TCP <code>1337</code> aux connexions
+          externes.
+        </p>
       </div>
-
-    </div><!-- /writeup-steps -->
-
-    <!-- IOC Summary -->
-    <!-- mettre un style avec des ecarts -->
-    <div class="writeup-intro fade-up" style="margin: 2rem; border-left-color:var(--accent2);">
-      <p
-        style="font-family:var(--font-mono); font-size:0.78rem; letter-spacing:1px; color:var(--accent2); text-transform:uppercase; margin-bottom:0.9rem;">
-        // Synthèse — Chaîne d'attaque
-      </p>
-      <p>
-        <strong>1. Accès Initial (T1505.003) :</strong> L'intrusion commence par la compromission du serveur web où
-        l'attaquant parvient à déposer un webshell.
-      </p>
-      <p>
-        <strong>2. Vol d'Identifiants (T1003) :</strong> Une fois l'accès initial sécurisé, l'outil
-        <code>Mimikatz</code> est déployé sur le système pour extraire les hachages NTLM ou les mots de passe en clair
-        directement depuis la mémoire du serveur.
-      </p>
-      <p>
-        <strong>3. Élévation de Privilèges (Event 4672) :</strong> L'attaquant consolide son emprise en obtenant les
-        droits d'administration. Les journaux révèlent l'attribution de privilèges spéciaux
-      </p>
-      <p>
-        <strong>4. Persistance Multicouche (T1547.001 & T1053.005) :</strong> Pour survivre à un redémarrage,
-        l'attaquant ancre sa présence à deux niveaux : la création d'une clé de registre <code>BadrClient</code> qui
-        s'exécute automatiquement, et la mise en place de la tâche planifiée <code>clean file system</code> lançant un
-        reverse shell via <code>nc.ps1</code> sur le port 1348.
-      </p>
-      <p>
-        <strong>5. Command & Control (T1071) :</strong> La communication avec l'infrastructure pirate est garantie par
-        un DNS poisoning redirigeant le trafic légitime vers l'IP <code>76.32.97.132</code>. Pour parfaire son contrôle,
-        une règle de pare-feu est ajoutée pour ouvrir le port TCP <code>1337</code> aux connexions externes.
-      </p>
-    </div>
 
     </div>
   </section>
