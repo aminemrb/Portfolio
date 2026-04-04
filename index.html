@@ -12,7 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;600;700;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
 </head>
 
 <body>
@@ -22,7 +22,8 @@
 
   <!-- ░ ANNOUNCEMENT BAR ░ -->
   <div id="announce-bar">
-    <span class="announce-text">Disponible pour une <strong>alternance de 24 mois</strong> en Ingénierie systemes, réseaux et sécurité — début souhaité&nbsp;sept/oct&nbsp;2026</span>
+    <span class="announce-text">Disponible pour une <strong>alternance de 24 mois</strong> en Cybersécurité/Réseaux —
+      début souhaité&nbsp;sept/oct&nbsp;2026</span>
     <button class="announce-close" id="announce-close" aria-label="Fermer">&times;</button>
   </div>
 
@@ -33,8 +34,8 @@
       <li><a href="#about" id="nav-about">À propos</a></li>
       <li><a href="#formation" id="nav-formation">Formation</a></li>
       <li><a href="#skills" id="nav-skills">Compétences</a></li>
-      <li><a href="#projects" id="nav-projects">Projets</a></li>
-      <li><a href="investigating-windows.html">TryHackMe</a></li>
+      <li><a href="homelab.html" id="nav-homelab">Home Lab</a></li>
+      <li><a href="tryhackme.html">TryHackMe</a></li>
       <li><a href="#contact" id="nav-contact">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
@@ -50,8 +51,7 @@
         <span class="cursor">|</span>
       </div>
       <p class="hero-sub">Étudiant en <strong>Licence IRT</strong> à l'<strong>Université de Toulouse</strong> passionné
-        par
-        les réseaux, la cybersécurité et les nouvelles technologies.</p>
+        par la cybersécurité et les nouvelles technologies.</p>
       <div class="hero-cta">
         <a href="CV_Amine_Mourabit.pdf" download="CV_Amine_Mourabit.pdf" class="btn btn-primary"
           id="hero-btn-cv">Télécharger mon CV</a>
@@ -105,7 +105,7 @@
           <div class="stat-card">
             <div class="stat-icon">🌐</div>
             <div class="stat-info">
-              <span class="stat-value">Infrastructures réseaux et sécurité</span>
+              <span class="stat-value">Cybersécurité/Réseaux</span>
               <span class="stat-label">Domaine de spécialisation</span>
             </div>
           </div>
@@ -113,7 +113,7 @@
             <div class="stat-icon">👨‍💻</div>
             <div class="stat-info">
               <span class="stat-value">Autodidacte</span>
-              <span class="stat-label">TryHackMe ⸱ HackTheBox ⸱ Cisco Networking Academy</span>
+              <span class="stat-label">TryHackMe ⸱ HackTheBox ⸱ Cisco ⸱ Veille active (Cyber, IA)</span>
             </div>
           </div>
           <div class="stat-card">
@@ -276,96 +276,6 @@
     </div>
   </section>
 
-  <!-- ░ PROJECTS ░ -->
-  <section class="section" id="projects">
-    <div class="container">
-      <h2 class="section-title"><span class="accent">//</span> Quelques Projets</h2>
-      <div class="projects-grid">
-
-        <article class="project-card" id="project-1">
-          <div class="project-header">
-            <span class="project-category">Réseaux</span>
-            <div class="project-links">
-              <span class="project-link-icon" title="Voir le projet">⬡</span>
-            </div>
-          </div>
-          <h3 class="project-title">Infrastructure Réseau d'Entreprise</h3>
-          <p class="project-desc">Conception et configuration d'une infrastructure réseau complète avec VLANs, routage
-            inter-VLAN, protocoles de routage dynamique et sécurisation des accès.</p>
-          <div class="project-tags">
-            <span class="tag">Equipements Cisco</span>
-            <span class="tag">VLAN</span>
-            <span class="tag">Routage Inter-VLAN</span>
-          </div>
-        </article>
-
-        <article class="project-card" id="project-2">
-          <div class="project-header">
-            <span class="project-category">Cybersécurité</span>
-            <div class="project-links">
-              <span class="project-link-icon" title="Voir le projet">⬡</span>
-            </div>
-          </div>
-          <h3 class="project-title">SOC Home Lab</h3>
-          <p class="project-desc">Conception d'une infrastructure virtualisée et intégration d'un SIEM pour la
-            supervision, la centralisation des logs et la détection d'intrusions.
-          </p>
-          <div class="project-tags">
-            <span class="tag">Kali Linux</span>
-            <span class="tag">Splunk</span>
-            <span class="tag">pfSense</span>
-            <span class="tag">Active Directory</span>
-            <span class="tag">Ubuntu</span>
-          </div>
-        </article>
-
-        <article class="project-card" id="project-3">
-          <div class="project-header">
-            <span class="project-category">Systèmes</span>
-            <div class="project-links">
-              <span class="project-link-icon" title="Voir le projet">⬡</span>
-            </div>
-          </div>
-          <h3 class="project-title">Infrastructure Active Directory</h3>
-          <p class="project-desc">Conception et déploiement automatisé d'un domaine Windows Server via
-            Ansible. Intégration de la haute disponibilité, des services réseaux et durcissement par
-            stratégies de groupe.</p>
-          <div class="project-tags">
-            <span class="tag">Windows</span>
-            <span class="tag">Active Directory</span>
-            <span class="tag">DNS</span>
-            <span class="tag">DHCP</span>
-            <span class="tag">Ansible</span>
-            <span class="tag">GPO</span>
-          </div>
-        </article>
-
-        <article class="project-card" id="project-4">
-          <div class="project-header">
-            <span class="project-category">DevOps</span>
-            <div class="project-links">
-              <span class="project-link-icon" title="Voir le projet">⬡</span>
-            </div>
-          </div>
-          <h3 class="project-title">Développement, Intégration et déploiement continu d'une application web</h3>
-          <p class="project-desc">Conception d'une architecture multiconteneurs et mise en place de pipelines automatisés via GitLab CI/CD pour orchestrer les tests, le build et le déploiement sur environnement Linux.
-          </p>
-          <div class="project-tags">
-            <span class="tag">PHP</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">Linux</span>
-            <span class="tag">Docker</span>
-            <span class="tag">GitLab CI/CD</span>
-            <span class="tag">Gestion de projet</span>
-          </div>
-        </article>
-
-      </div>
-      <p class="projects-note">💡 Les projets peuvent être mis à jour. <a href="#contact"
-          class="inline-link">Contactez-moi</a> pour plus de détails.</p>
-    </div>
-  </section>
-
   <!-- ░ CONTACT ░ -->
   <section class="section section-dark" id="contact">
     <div class="container">
@@ -421,14 +331,14 @@
           <a href="#about">À propos</a>
           <a href="#formation">Formation</a>
           <a href="#skills">Compétences</a>
-          <a href="#projects">Projets</a>
+          <a href="homelab.html">Home Lab</a>
           <a href="#contact">Contact</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="assets/js/script.js"></script>
   <script>
     document.getElementById('announce-close').addEventListener('click', function () {
       document.getElementById('announce-bar').style.display = 'none';

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="TryHackMe – Parcours d'apprentissage, write-ups et rooms réalisés par Amine Mourabit en cybersécurité." />
+  <title>TryHackMe | Amine Mourabit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;600;700;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+
+  <!-- ░ CANVAS PARTICLE BACKGROUND ░ -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- ░ NAV ░ -->
+  <nav id="navbar" style="top:0">
+    <div class="nav-logo"><a href="index.html" style="color:inherit">AMINE<span class="accent">_</span></a></div>
+    <ul class="nav-links">
+      <li><a href="index.html#about">À propos</a></li>
+      <li><a href="index.html#formation">Formation</a></li>
+      <li><a href="index.html#skills">Compétences</a></li>
+      <li><a href="homelab.html">Home Lab</a></li>
+      <li><a href="tryhackme.html" class="nav-active" id="nav-thm">TryHackMe</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  </nav>
+
+  <!-- ░ THM HERO HEADER ░ -->
+  <div class="writeup-hero">
+    <div class="container">
+      <p class="writeup-breadcrumb">
+        <a href="index.html">Accueil</a>
+        <span>/</span>
+        TryHackMe
+      </p>
+      <div class="writeup-badge">&nbsp;Autoformation</div>
+      <h1 class="writeup-title">TryHackMe</h1>
+      <p class="thm-hero-desc">Passionné par la cybersécurité, je complète mes cours universitaires par un
+        apprentissage pratique sur TryHackMe. Parcours structurés, challenges techniques et write-ups détaillés
+        constituent mon terrain d'entraînement quotidien.</p>
+    </div>
+  </div>
+
+  <!-- ░ LEARNING PATHS ░ -->
+  <section class="section section-dark" id="learning-paths">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> Learning Paths</h2>
+
+      <div class="lp-grid">
+
+        <!-- Pre-Security -->
+        <div class="lp-card fade-up">
+          <div class="lp-header">
+            <h3 class="lp-name">Pre-Security Learning Path</h3>
+            <span class="lp-percent">100%</span>
+          </div>
+          <div class="lp-bar">
+            <div class="lp-fill" data-width="100"></div>
+          </div>
+          <p class="lp-desc">Fondamentaux : modèle OSI, HTTP, DNS, Linux, Windows et bases de la sécurité offensive et
+            défensive.</p>
+        </div>
+
+        <!-- SOC Level 1 -->
+        <div class="lp-card fade-up">
+          <div class="lp-header">
+            <h3 class="lp-name">SOC Level 1</h3>
+            <span class="lp-percent">70%</span>
+          </div>
+          <div class="lp-bar">
+            <div class="lp-fill" data-width="70"></div>
+          </div>
+          <p class="lp-desc">Analyse de logs, SIEM, détection d'intrusions, investigation d'incidents et réponse à
+            incident dans un environnement SOC.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ░ WRITE-UPS & ROOMS ░ -->
+  <section class="section" id="writeups">
+    <div class="container">
+      <h2 class="section-title"><span class="accent">//</span> Write-ups & Rooms</h2>
+
+      <!-- Filters -->
+      <div class="thm-filters" id="thm-filters">
+        <button class="thm-filter-btn active" data-filter="all">Tous</button>
+        <button class="thm-filter-btn" data-filter="blue-team">Blue Team</button>
+        <button class="thm-filter-btn" data-filter="red-team">Red Team</button>
+        <button class="thm-filter-btn" data-filter="windows">Windows</button>
+        <button class="thm-filter-btn" data-filter="linux">Linux</button>
+      </div>
+
+      <!-- Cards Grid -->
+      <div class="thm-grid" id="thm-grid">
+
+        <!-- Investigating Windows -->
+        <article class="thm-card fade-up" data-category="blue-team windows" id="room-investigating-windows">
+          <div class="thm-card-top">
+            <span class="thm-card-difficulty thm-diff-easy">Easy</span>
+          </div>
+          <h3 class="thm-card-title">Investigating Windows</h3>
+          <p class="thm-card-desc">Investigation forensique d'une machine Windows Server 2016 compromise —
+            reconstruction
+            de la chaîne d'attaque, de l'accès initial au C2.</p>
+          <div class="thm-card-tags">
+            <span class="tag">Blue Team</span>
+            <span class="tag">Windows</span>
+            <span class="tag">DFIR</span>
+            <span class="tag">Event Logs</span>
+          </div>
+          <a href="thm/investigating-windows.html" class="thm-card-link">
+            Lire le write-up <span class="accent">→</span>
+          </a>
+        </article>
+
+      </div><!-- /thm-grid -->
+    </div>
+  </section>
+
+  <!-- ░ FOOTER ░ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <span class="footer-logo">AM<span class="accent">_</span></span>
+        <p class="footer-text">© 2026 Amine Mourabit · Portfolio</p>
+        <div class="footer-links">
+          <a href="index.html">Accueil</a>
+          <a href="index.html#about">À propos</a>
+          <a href="index.html#formation">Formation</a>
+          <a href="index.html#skills">Compétences</a>
+          <a href="homelab.html">Home Lab</a>
+          <a href="tryhackme.html">TryHackMe</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>

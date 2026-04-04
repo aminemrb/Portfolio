@@ -151,7 +151,7 @@
 (function initFadeUp() {
   // Add class to animatable elements (programmatic)
   const autoTargets = document.querySelectorAll(
-    '.stat-card, .skill-card, .project-card, .about-text p, .contact-item'
+    '.stat-card, .skill-card, .net-node, .homelab-terminal, .thm-card, .lp-card, .about-text p, .contact-item'
   );
   autoTargets.forEach(el => el.classList.add('fade-up'));
 
@@ -187,6 +187,87 @@
   }, { threshold: 0.3 });
 
   fills.forEach(f => observer.observe(f));
+})();
+
+
+// ── HOME LAB – NODE INTERACTIONS ──────────────────────────────
+(function initHomeLab() {
+  const diagram = document.getElementById('homelab-diagram');
+  const body = document.getElementById('terminal-body');
+  if (!diagram || !body) return;
+
+  const nodeData = {
+    pfsense: {
+      title: 'pfSense',
+      ip: '10.0.0.0/24',
+      desc: 'Routeur et pare-feu central. Assure le <strong>cloisonnement strict des VLANs</strong> (DMZ, LAN, Management, Attaquant) et agit comme point de collecte réseau de premier niveau.',
+      tags: ['Firewall', 'Routage', 'VLANs', 'Syslog']
+    },
+    dmz: {
+      title: 'DMZ Web',
+      ip: '10.0.3.0/24',
+      desc: 'Zone exposée hébergeant une application vulnérable (<strong>DVWA</strong>). Sert de cible pour l\'investigation, la collecte d\'<strong>IoC</strong> et la future implémentation de règles de défense (WAF).',
+      tags: ['DVWA', 'Apache', 'WAF', 'IoC']
+    },
+    siem: {
+      title: 'SIEM (Splunk)',
+      ip: '10.0.4.0/24',
+      desc: 'Serveur de centralisation et d\'analyse. Ingère les <strong>journaux des serveurs Windows</strong>, les logs <strong>Syslog</strong> et <strong>Apache</strong> pour la détection d\'anomalies.',
+      tags: ['Splunk', 'Log Analysis', 'Syslog', 'Détection']
+    },
+    attaquant: {
+      title: 'Attaquant (Kali Linux)',
+      ip: '10.0.66.0/24',
+      desc: 'Environnement offensif isolé. Utilisé pour exécuter des <strong>tests de pénétration</strong> ciblés (compromission Active Directory, exploitation de failles Web sur DVWA) et générer le trafic malveillant à analyser.',
+      tags: ['Kali Linux', 'Pentest', 'AD Attack', 'Red Team']
+    },
+    lan: {
+      title: 'LAN Corporate',
+      ip: '10.0.2.0/24',
+      desc: 'Environnement d\'entreprise simulé (<strong>Windows Server AD</strong>, Client Win10). Déploiement d\'agents de collecte (<strong>Universal Forwarder</strong>) pour le monitoring des événements système.',
+      tags: ['AD DS', 'Windows 10', 'Forwarder', 'Monitoring']
+    },
+    management: {
+      title: 'Management (Ubuntu)',
+      ip: '10.0.1.0/24',
+      desc: 'Serveur de rebond administratif. Utilisé exclusivement pour accéder de manière sécurisée aux <strong>interfaces web d\'administration</strong> de l\'infrastructure (Splunk, console pfSense).',
+      tags: ['Ubuntu', 'Administration', 'SSH', 'Rebond']
+    }
+  };
+
+  diagram.addEventListener('click', (e) => {
+    const node = e.target.closest('.net-node');
+    if (!node) return;
+
+    const key = node.dataset.node;
+    const data = nodeData[key];
+    if (!data) return;
+
+    // Toggle active state
+    diagram.querySelectorAll('.net-node').forEach(n => n.classList.remove('active'));
+    node.classList.add('active');
+
+    // Build terminal content
+    const tagsHtml = data.tags
+      .map(t => `<span class="tag">${t}</span>`)
+      .join('');
+
+    body.innerHTML = `
+      <p class="terminal-title"><span class="accent">&gt;</span> ${data.title}</p>
+      <span class="terminal-ip">${data.ip}</span>
+      <p class="terminal-desc">${data.desc}</p>
+      <div class="terminal-tags">${tagsHtml}</div>
+      <span class="terminal-cursor"></span>
+    `;
+
+    // Smooth scroll to terminal on mobile
+    if (window.innerWidth <= 1024) {
+      document.getElementById('homelab-terminal').scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }
+  });
 })();
 
 
@@ -332,4 +413,54 @@ async function handleSubmit(event) {
   // Set data-text on hero name for glitch effect
   const name = document.querySelector('.hero-name');
   if (name) name.setAttribute('data-text', name.textContent);
+})();
+
+
+// ── TRYHACKME – ROOM CARD FILTERS ─────────────────────────────
+(function initThmFilters() {
+  const filterWrap = document.getElementById('thm-filters');
+  const grid = document.getElementById('thm-grid');
+  if (!filterWrap || !grid) return;
+
+  const buttons = filterWrap.querySelectorAll('.thm-filter-btn');
+  const cards = grid.querySelectorAll('.thm-card');
+
+  filterWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.thm-filter-btn');
+    if (!btn) return;
+
+    // Toggle active button
+    buttons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const filter = btn.dataset.filter;
+
+    cards.forEach(card => {
+      if (filter === 'all') {
+        card.classList.remove('hidden');
+      } else {
+        const categories = card.dataset.category || '';
+        card.classList.toggle('hidden', !categories.includes(filter));
+      }
+    });
+  });
+})();
+
+
+// ── TRYHACKME – LEARNING PATH BARS ────────────────────────────
+(function initLpBars() {
+  const fills = document.querySelectorAll('.lp-fill');
+  if (!fills.length) return;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const w = entry.target.getAttribute('data-width');
+        entry.target.style.width = `${w}%`;
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  fills.forEach(f => observer.observe(f));
 })();

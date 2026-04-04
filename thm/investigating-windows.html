@@ -12,7 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;600;700;900&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
   <style>
     /* ── WRITE-UP STEP GRID ── */
     .step-meta {
@@ -117,14 +117,14 @@
 
   <!-- ░ NAV ░ -->
   <nav id="navbar">
-    <div class="nav-logo"><a href="index.html" style="color:inherit">AM<span class="accent">_</span></a></div>
+    <div class="nav-logo"><a href="../index.html" style="color:inherit">AM<span class="accent">_</span></a></div>
     <ul class="nav-links">
-      <li><a href="index.html#about">À propos</a></li>
-      <li><a href="index.html#formation">Formation</a></li>
-      <li><a href="index.html#skills">Compétences</a></li>
-      <li><a href="index.html#projects">Projets</a></li>
-      <li><a href="investigating-windows.html" class="nav-active">TryHackMe</a></li>
-      <li><a href="index.html#contact">Contact</a></li>
+      <li><a href="../index.html#about">À propos</a></li>
+      <li><a href="../index.html#formation">Formation</a></li>
+      <li><a href="../index.html#skills">Compétences</a></li>
+      <li><a href="../homelab.html">Home Lab</a></li>
+      <li><a href="../tryhackme.html" class="nav-active">TryHackMe</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
     </ul>
     <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
   </nav>
@@ -204,8 +204,8 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 systeminfo</figcaption>
-              <img src="img/thm/windows/1.png" alt="Commande systeminfo – Windows Server 2016 Datacenter Build 14393"
-                loading="lazy" />
+              <img src="../assets/img/thm/windows/1.png"
+                alt="Commande systeminfo – Windows Server 2016 Datacenter Build 14393" loading="lazy" />
             </figure>
           </div>
         </div>
@@ -236,8 +236,8 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Event ID 4624 – dernière ouverture de session</figcaption>
-              <img src="img/thm/windows/2.png" alt="Event Viewer – Event ID 4624 montrant la connexion Administrator"
-                loading="lazy" />
+              <img src="../assets/img/thm/windows/2.png"
+                alt="Event Viewer – Event ID 4624 montrant la connexion Administrator" loading="lazy" />
             </figure>
           </div>
         </div>
@@ -268,8 +268,8 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 net user John – Last Logon</figcaption>
-              <img src="img/thm/windows/3.png" alt="Commande net user John affichant la date de dernière connexion"
-                loading="lazy" />
+              <img src="../assets/img/thm/windows/3.png"
+                alt="Commande net user John affichant la date de dernière connexion" loading="lazy" />
             </figure>
           </div>
         </div>
@@ -303,7 +303,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Registre – clé Run malveillante BadrClient</figcaption>
-              <img src="img/thm/windows/4.png" alt="Éditeur de registre – valeur BadrClient dans la clé Run"
+              <img src="../assets/img/thm/windows/4.png" alt="Éditeur de registre – valeur BadrClient dans la clé Run"
                 loading="lazy" />
             </figure>
           </div>
@@ -335,7 +335,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 net localgroup administrators</figcaption>
-              <img src="img/thm/windows/5.png" alt="net localgroup administrators – comptes suspects présents"
+              <img src="../assets/img/thm/windows/5.png" alt="net localgroup administrators – comptes suspects présents"
                 loading="lazy" />
             </figure>
           </div>
@@ -367,7 +367,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Task Scheduler – tâche Clean file system</figcaption>
-              <img src="img/thm/windows/6.png" alt="Planificateur de tâches Windows – tâche Clean file system"
+              <img src="../assets/img/thm/windows/6.png" alt="Planificateur de tâches Windows – tâche Clean file system"
                 loading="lazy" />
             </figure>
           </div>
@@ -399,7 +399,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Action de la tâche – nc.ps1 -l 1348</figcaption>
-              <img src="img/thm/windows/7.png" alt="Action de la tâche planifiée – reverse shell nc.ps1"
+              <img src="../assets/img/thm/windows/7.png" alt="Action de la tâche planifiée – reverse shell nc.ps1"
                 loading="lazy" />
             </figure>
           </div>
@@ -430,7 +430,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 net user Jenny – Last Logon : Never</figcaption>
-              <img src="img/thm/windows/8.png" alt="net user Jenny – Last Logon Never" loading="lazy" />
+              <img src="../assets/img/thm/windows/8.png" alt="net user Jenny – Last Logon Never" loading="lazy" />
             </figure>
           </div>
         </div>
@@ -461,7 +461,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Corrélation des dates – compromission initiale</figcaption>
-              <img src="img/thm/windows/9.png"
+              <img src="../assets/img/thm/windows/9.png"
                 alt="Corrélation des horodatages révélant le 3/2/2019 comme date de compromission" loading="lazy" />
             </figure>
           </div>
@@ -493,7 +493,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Event ID 4672 – attribution de privilèges spéciaux</figcaption>
-              <img src="img/thm/windows/10.png"
+              <img src="../assets/img/thm/windows/10.png"
                 alt="Event Viewer – Event ID 4672 montrant l'élévation de privilèges à 4:04:49 PM" loading="lazy" />
             </figure>
           </div>
@@ -527,7 +527,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Windows Defender – Event 1116 – HackTool:Win32/Mimikatz.l</figcaption>
-              <img src="img/thm/windows/11.png" alt="Windows Defender Event 1116 – détection de Mimikatz"
+              <img src="../assets/img/thm/windows/11.png" alt="Windows Defender Event 1116 – détection de Mimikatz"
                 loading="lazy" />
             </figure>
           </div>
@@ -561,8 +561,8 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Fichier hosts – entrée frauduleuse C2</figcaption>
-              <img src="img/thm/windows/12.png" alt="Fichier hosts Windows – google.com redirigé vers 76.32.97.132"
-                loading="lazy" />
+              <img src="../assets/img/thm/windows/12.png"
+                alt="Fichier hosts Windows – google.com redirigé vers 76.32.97.132" loading="lazy" />
             </figure>
           </div>
         </div>
@@ -594,7 +594,8 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 C:\inetpub\wwwroot – webshell b.jsp</figcaption>
-              <img src="img/thm/windows/13.png" alt="Répertoire wwwroot IIS – webshell b.jsp" loading="lazy" />
+              <img src="../assets/img/thm/windows/13.png" alt="Répertoire wwwroot IIS – webshell b.jsp"
+                loading="lazy" />
             </figure>
           </div>
         </div>
@@ -626,7 +627,7 @@
             </div>
             <figure class="step-screenshot">
               <figcaption>📸 Pare-feu Windows – règle entrante port TCP 1337</figcaption>
-              <img src="img/thm/windows/14.png"
+              <img src="../assets/img/thm/windows/14.png"
                 alt="Règles Inbound pare-feu Windows – Allow outside connections for development port 1337"
                 loading="lazy" />
             </figure>
@@ -684,14 +685,14 @@
           <a href="index.html#about">À propos</a>
           <a href="index.html#formation">Formation</a>
           <a href="index.html#skills">Compétences</a>
-          <a href="index.html#projects">Projets</a>
+          <a href="homelab.html">Home Lab</a>
           <a href="index.html#contact">Contact</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="../assets/js/script.js"></script>
 
 </body>
 
