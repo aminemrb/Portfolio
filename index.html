@@ -27,19 +27,7 @@
     <button class="announce-close" id="announce-close" aria-label="Fermer">&times;</button>
   </div>
 
-  <!-- ░ NAV ░ -->
-  <nav id="navbar">
-    <div class="nav-logo">AMINE<span class="accent">_</span></div>
-    <ul class="nav-links">
-      <li><a href="#about" id="nav-about">À propos</a></li>
-      <li><a href="#formation" id="nav-formation">Formation</a></li>
-      <li><a href="#skills" id="nav-skills">Compétences</a></li>
-      <li><a href="homelab.html" id="nav-homelab">Home Lab</a></li>
-      <li><a href="tryhackme.html">TryHackMe</a></li>
-      <li><a href="#contact" id="nav-contact">Contact</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
-  </nav>
+  <div data-site-header data-page="index"></div>
 
   <!-- ░ HERO ░ -->
   <section class="hero" id="home">
@@ -181,13 +169,13 @@
     </div>
   </section>
 
-  <!-- ░ SKILLS ░ -->
+  <!-- ░ SKILLS ░
   <section class="section section-dark" id="skills">
     <div class="container">
       <h2 class="section-title"><span class="accent">//</span> Compétences</h2>
       <div class="skills-cards-grid">
 
-        <!-- Carte 1 : Cybersécurité & Analyse -->
+        Carte 1 : Cybersécurité & Analyse
         <div class="skill-card">
           <div class="skill-card-header">
             <span class="skill-card-icon">🛡️</span>
@@ -208,7 +196,7 @@
           </div>
         </div>
 
-        <!-- Carte 2 : Architectures Réseaux -->
+        Carte 2 : Architectures Réseaux
         <div class="skill-card">
           <div class="skill-card-header">
             <span class="skill-card-icon">🌐</span>
@@ -233,7 +221,7 @@
           </div>
         </div>
 
-        <!-- Carte 3 : Systèmes & Automatisation -->
+        Carte 3 : Systèmes & Automatisation
         <div class="skill-card">
           <div class="skill-card-header">
             <span class="skill-card-icon">⚙️</span>
@@ -256,7 +244,7 @@
           </div>
         </div>
 
-        <!-- Carte 4 : Transverse -->
+        Carte 4 : Transverse
         <div class="skill-card">
           <div class="skill-card-header">
             <span class="skill-card-icon">🔗</span>
@@ -275,6 +263,7 @@
       </div>
     </div>
   </section>
+  -->
 
   <!-- ░ CONTACT ░ -->
   <section class="section section-dark" id="contact">
@@ -338,6 +327,7 @@
     </div>
   </footer>
 
+  <script src="assets/js/header.js"></script>
   <script src="assets/js/script.js"></script>
   <script>
     document.getElementById('announce-close').addEventListener('click', function () {

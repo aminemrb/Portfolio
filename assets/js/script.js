@@ -132,6 +132,11 @@
 (function initScrollSpy() {
   const sections = document.querySelectorAll('section[id]');
   const links = document.querySelectorAll('.nav-links a');
+  const observedSections = Array.from(sections).filter(section =>
+    Array.from(links).some(link => link.getAttribute('href') === `#${section.id}`)
+  );
+
+  if (!observedSections.length) return;
 
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -143,7 +148,7 @@
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
 
-  sections.forEach(s => observer.observe(s));
+  observedSections.forEach(s => observer.observe(s));
 })();
 
 
