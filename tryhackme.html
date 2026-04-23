@@ -56,44 +56,64 @@
           </div>
           <p class="lp-desc">Fondamentaux : modèle OSI, HTTP, DNS, Linux, Windows et bases de la sécurité offensive et
             défensive.</p>
+          <a class="lp-cert-link" href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-HZMRUY0ZIS.pdf" target="_blank" rel="noopener noreferrer"
+            aria-label="Voir le certificat Pre-Security">Voir le certificat <span class="accent">→</span></a>
         </div>
 
         <!-- SOC Level 1 -->
         <div class="lp-card fade-up">
           <div class="lp-header">
             <h3 class="lp-name">SOC Level 1</h3>
-            <span class="lp-percent">90%</span>
+            <span class="lp-percent">100%</span>
           </div>
           <div class="lp-bar">
-            <div class="lp-fill" data-width="90"></div>
+            <div class="lp-fill" data-width="100"></div>
           </div>
           <p class="lp-desc">Analyse de logs, SIEM, détection d'intrusions, investigation d'incidents et réponse à
             incident dans un environnement SOC.</p>
+          <a class="lp-cert-link" href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-WTUNT4LPK7.pdf" target="_blank" rel="noopener noreferrer"
+            aria-label="Voir le certificat SOC Level 1">Voir le certificat <span class="accent">→</span></a>
         </div>
 
       </div>
     </div>
   </section>
 
-  <!-- ░ WRITE-UPS & ROOMS ░ -->
+  <!-- ░ WRITE-UPS ░ -->
   <section class="section" id="writeups">
     <div class="container">
-      <h2 class="section-title"><span class="accent">//</span> Write-ups & Rooms</h2>
+      <h2 class="section-title"><span class="accent">//</span> Write-ups</h2>
+
+      <div class="thm-tools">
+        <label class="thm-search-label" for="thm-search">Recherche</label>
+        <input id="thm-search" class="thm-search-input" type="search"
+          placeholder="Rechercher par nom de challenge ou tags..." autocomplete="off"
+          aria-label="Rechercher un write-up par nom ou mot-clé" />
+        <p class="thm-results-count" id="thm-results-count" aria-live="polite"></p>
+      </div>
 
       <!-- Filters -->
-      <div class="thm-filters" id="thm-filters">
+      <div class="thm-filters" id="thm-filters-base" aria-label="Filtres de base">
         <button class="thm-filter-btn active" data-filter="all">Tous</button>
-        <button class="thm-filter-btn" data-filter="blue-team">Blue Team</button>
-        <button class="thm-filter-btn" data-filter="red-team">Red Team</button>
+        <button class="thm-filter-btn" data-filter="dfir">DFIR</button>
+        <button class="thm-filter-btn" data-filter="malware-analysis">Malware Analysis</button>
+        <button class="thm-filter-btn" data-filter="threat-intel">Threat Intel</button>
+        <button class="thm-filter-btn" data-filter="siem">SIEM / ELK</button>
         <button class="thm-filter-btn" data-filter="windows">Windows</button>
-        <button class="thm-filter-btn" data-filter="linux">Linux</button>
+      </div>
+
+      <div class="thm-filters" id="thm-filters-difficulty" aria-label="Filtres de difficulte">
+        <button class="thm-filter-btn active" data-difficulty="all">Toutes difficultes</button>
+        <button class="thm-filter-btn" data-difficulty="easy">Easy</button>
+        <button class="thm-filter-btn" data-difficulty="medium">Medium</button>
+        <button class="thm-filter-btn" data-difficulty="hard">Hard</button>
       </div>
 
       <!-- Cards Grid -->
       <div class="thm-grid" id="thm-grid">
 
         <!-- Investigating Windows -->
-        <article class="thm-card fade-up" data-category="blue-team windows" id="room-investigating-windows">
+        <article class="thm-card fade-up" data-category="blue-team dfir windows event-logs" id="room-investigating-windows">
           <div class="thm-card-top">
             <span class="thm-card-difficulty thm-diff-easy">Easy</span>
           </div>
@@ -113,7 +133,7 @@
         </article>
         
         <!-- Shadow Trace -->
-        <article class="thm-card fade-up" data-category="blue-team malware-analysis windows" id="room-shadow-trace">
+        <article class="thm-card fade-up" data-category="blue-team malware-analysis windows static-analysis threat-intel" id="room-shadow-trace">
           <div class="thm-card-top">
             <span class="thm-card-difficulty thm-diff-easy">Easy</span>
           </div>
@@ -135,7 +155,7 @@
       </article>
 
       <!-- Invite Only-->
-      <article class="thm-card fade-up" data-category="blue-team threat-intel" id="room-invite-only">
+      <article class="thm-card fade-up" data-category="blue-team threat-intel malware-analysis osint" id="room-invite-only">
         <div class="thm-card-top">
           <span class="thm-card-difficulty thm-diff-easy">Easy</span>
         </div>
@@ -153,7 +173,7 @@
        </article>
 
       <!-- ItsyBitsy -->
-      <article class="thm-card fade-up" data-category="blue-team siem" id="room-itsybitsy">
+      <article class="thm-card fade-up" data-category="blue-team siem elk network threat-hunting" id="room-itsybitsy">
         <div class="thm-card-top">
           <span class="thm-card-difficulty thm-diff-medium">Medium</span>
         </div>
@@ -171,7 +191,7 @@
       </article>
 
       <!-- Tempest -->
-      <article class="thm-card fade-up" data-category="blue-team dfir network windows" id="room-tempest">
+      <article class="thm-card fade-up" data-category="blue-team dfir network windows sysmon" id="room-tempest">
         <div class="thm-card-top">
           <span class="thm-card-difficulty thm-diff-medium">Medium</span>
         </div>
@@ -193,7 +213,7 @@
       </article>
 
       <!-- Boogeyman 2 -->
-      <article class="thm-card fade-up" data-category="blue-team dfir memory windows malware" id="room-boogeyman-2">
+      <article class="thm-card fade-up" data-category="blue-team dfir memory-forensics windows malware-analysis" id="room-boogeyman-2">
         <div class="thm-card-top">
           <span class="thm-card-difficulty thm-diff-medium">Medium</span>
         </div>
@@ -213,7 +233,29 @@
         </a>
       </article>
 
+      <!-- Boogeyman 3 -->
+      <article class="thm-card fade-up" data-category="blue-team dfir elk siem sysmon windows active-directory threat-hunting" id="room-boogeyman-3">
+        <div class="thm-card-top">
+          <span class="thm-card-difficulty thm-diff-medium">Medium</span>
+        </div>
+        
+        <h3 class="thm-card-title">Boogeyman 3</h3>
+        
+        <p class="thm-card-desc">Investigation approfondie d'une attaque réseau complexe à l'aide de la stack ELK et Sysmon. Traque d'une chaîne d'infection impliquant un contournement UAC (fodhelper), le vol d'identifiants (Mimikatz), des mouvements latéraux, une attaque DCSync et le déploiement d'un ransomware.</p>
+        
+        <div class="thm-card-tags">
+          <span class="tag">ELK Stack / Kibana</span>
+          <span class="tag">Sysmon</span>
+          <span class="tag">Forensic</span>
+        </div>
+        
+        <a href="https://mint-hose-365.notion.site/Boogeyman-3-Forensic-analysis-34b40aaa4b908005b4f5eff6f39695b9?source=copy_link" target="_blank" class="thm-card-link">
+          Lire le write-up <span class="accent">→</span>
+        </a>
+      </article>
+
       </div><!-- /thm-grid -->
+      <p class="thm-empty-state" id="thm-empty-state">Aucun write-up ne correspond à ce filtre ou à cette recherche.</p>
     </div>
   </section>
 

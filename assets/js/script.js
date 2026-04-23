@@ -423,32 +423,89 @@ async function handleSubmit(event) {
 
 // ── TRYHACKME – ROOM CARD FILTERS ─────────────────────────────
 (function initThmFilters() {
-  const filterWrap = document.getElementById('thm-filters');
+  const baseFilterWrap = document.getElementById('thm-filters-base');
+  const difficultyFilterWrap = document.getElementById('thm-filters-difficulty');
   const grid = document.getElementById('thm-grid');
-  if (!filterWrap || !grid) return;
+  const searchInput = document.getElementById('thm-search');
+  const resultsCount = document.getElementById('thm-results-count');
+  const emptyState = document.getElementById('thm-empty-state');
+  if (!baseFilterWrap || !difficultyFilterWrap || !grid) return;
 
-  const buttons = filterWrap.querySelectorAll('.thm-filter-btn');
+  const baseButtons = baseFilterWrap.querySelectorAll('.thm-filter-btn');
+  const difficultyButtons = difficultyFilterWrap.querySelectorAll('.thm-filter-btn');
   const cards = grid.querySelectorAll('.thm-card');
+  let activeBaseFilter = 'all';
+  let activeDifficultyFilter = 'all';
 
-  filterWrap.addEventListener('click', (e) => {
+  function normalize(value) {
+    return (value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, ' ');
+  }
+
+  function cardSearchText(card) {
+    const title = card.querySelector('.thm-card-title')?.textContent || '';
+    // Search is intentionally limited to room title + white tags.
+    const tags = Array.from(card.querySelectorAll('.tag')).map(tag => tag.textContent).join(' ');
+    return normalize(`${title} ${tags}`);
+  }
+
+  function cardDifficulty(card) {
+    const badge = card.querySelector('.thm-card-difficulty')?.textContent || '';
+    return normalize(badge).trim();
+  }
+
+  function applyFilters() {
+    const query = normalize(searchInput?.value || '').trim();
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const categories = normalize(card.dataset.category || '');
+      const difficulty = cardDifficulty(card);
+      const matchesBaseFilter = activeBaseFilter === 'all' || categories.includes(activeBaseFilter);
+      const matchesDifficulty = activeDifficultyFilter === 'all' || difficulty === activeDifficultyFilter;
+      const matchesQuery = !query || cardSearchText(card).includes(query);
+      const isVisible = matchesBaseFilter && matchesDifficulty && matchesQuery;
+
+      card.classList.toggle('hidden', !isVisible);
+      if (isVisible) visibleCount++;
+    });
+
+    if (resultsCount) {
+      resultsCount.textContent = `${visibleCount} write-up${visibleCount > 1 ? 's' : ''} affiché${visibleCount > 1 ? 's' : ''}`;
+    }
+
+    if (emptyState) {
+      emptyState.classList.toggle('visible', visibleCount === 0);
+    }
+  }
+
+  baseFilterWrap.addEventListener('click', (e) => {
     const btn = e.target.closest('.thm-filter-btn');
     if (!btn) return;
 
-    // Toggle active button
-    buttons.forEach(b => b.classList.remove('active'));
+    baseButtons.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-
-    const filter = btn.dataset.filter;
-
-    cards.forEach(card => {
-      if (filter === 'all') {
-        card.classList.remove('hidden');
-      } else {
-        const categories = card.dataset.category || '';
-        card.classList.toggle('hidden', !categories.includes(filter));
-      }
-    });
+    activeBaseFilter = normalize(btn.dataset.filter || 'all').trim() || 'all';
+    applyFilters();
   });
+
+  difficultyFilterWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('.thm-filter-btn');
+    if (!btn) return;
+
+    difficultyButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeDifficultyFilter = normalize(btn.dataset.difficulty || 'all').trim() || 'all';
+    applyFilters();
+  });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', applyFilters);
+  }
+
+  applyFilters();
 })();
 
 
